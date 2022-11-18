@@ -1,9 +1,14 @@
 
 import throttle from 'lodash.throttle';
 
-const form = document.querySelector('.feedback-form');
-form.addEventListener('input', throttle(onFormData, 500));
-form.addEventListener('submit', onSubmitForm);
+const refs = {
+  form: document.querySelector('.feedback-form'),
+  email: document.querySelector('.feedback-form input'),
+  message: document.querySelector('.feedback-form textarea'),
+};
+
+refs.form.addEventListener('input', throttle(onFormData, 500));
+refs.form.addEventListener('submit', onSubmitForm);
 
 const formData = {};
 
@@ -12,6 +17,8 @@ function onFormData(e) {
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 }
 
+dataFromLocalStorage()
+
 function onSubmitForm(e) {
   console.log(JSON.parse(localStorage.getItem('feedback-form-state')));
   e.preventDefault();
@@ -19,12 +26,50 @@ function onSubmitForm(e) {
   localStorage.removeItem('feedback-form-state');
 }
 
-(function dataFromLocalStorage() {
+function dataFromLocalStorage() {
   const data = JSON.parse(localStorage.getItem('feedback-form-state'));
-  const email = document.querySelector('.feedback-form input');
-  const message = document.querySelector('.feedback-form textarea');
   if (data) {
-    email.value = data.email;
-    message.value = data.message;
-  }
-})();
+    refs.email.value = data.email || '';
+    refs.message.value = data.message || '';
+  } 
+};
+
+
+
+
+
+
+
+
+
+
+//===========================================
+
+// const STORAGE_KEY = 'feedback-msg';
+// const formData = {};
+
+// const refs = {
+//   form: document.querySelector('.feedback-form'),
+//   textarea: document.querySelector('.feedback-form textarea')
+// }
+// refs.form.addEventListener('submit', onFormSubmit);
+// refs.textarea.addEventListener('input', throttle(onTextInput, 500));
+// refs.form.addEventListener('input', event => {
+//   formData[event.target.name] = event.target.value;
+// });
+// populateTextarea();
+// function onFormSubmit(event) {
+//   event.preventDefault();
+//   event.currentTarget.reset();
+//   localStorage.removeItem(STORAGE_KEY);
+// }
+// function onTextInput(event) {
+//   const message = event.target.value;
+// localStorage.setItem(STORAGE_KEY,message)
+// }
+// function populateTextarea() {
+//   const savedMassage = localStorage.getItem(STORAGE_KEY);
+//   if (savedMassage) {
+//     refs.textarea.value=savedMassage
+//   }
+// }
